@@ -1,0 +1,8 @@
+[build]
+  functions = "netlify/functions"
+  publish = "."
+
+[[redirects]]
+  from = "/api/proprete-data"
+  to = "/.netlify/functions/proprete-data"
+  status = 200

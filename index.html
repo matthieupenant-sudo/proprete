@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contrôle Qualité Propreté — Grille générale</title>
+<style>
+  :root{
+    --bleu:#0b5394; --bleu-clair:#cfe2f3; --vert:#38761d; --vert-clair:#d9ead3;
+    --rouge:#cc0000; --rouge-clair:#f4cccc; --orange:#e69138; --orange-clair:#fce5cd; --gris:#666; --bg:#f4f6f8;
+  }
+  *{box-sizing:border-box;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);margin:0;color:#222;}
+  header{background:var(--bleu);color:#fff;padding:16px 24px;}
+  header h1{font-size:1.2rem;margin:0;}
+  header .sub{font-size:0.85rem;opacity:0.9;}
+  nav{display:flex;flex-wrap:wrap;background:#083d6b;padding:0 12px;}
+  nav button{background:none;border:none;color:#fff;padding:12px 16px;cursor:pointer;font-size:0.88rem;border-bottom:3px solid transparent;}
+  nav button.active{border-bottom:3px solid #ffd966;font-weight:bold;background:#0b5394;}
+  main{max-width:1050px;margin:20px auto;padding:0 16px 60px;}
+  .card{background:#fff;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,0.12);padding:20px;margin-bottom:20px;}
+  .card h2{margin-top:0;color:var(--bleu);border-bottom:2px solid var(--bleu-clair);padding-bottom:8px;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+  .grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;}
+  @media(max-width:700px){.grid,.grid3,.grid4{grid-template-columns:1fr;}}
+  label{display:block;font-weight:600;font-size:0.85rem;margin-bottom:4px;margin-top:8px;}
+  input[type=text],input[type=date],input[type=time],input[type=number],select,textarea{
+    width:100%;padding:8px;border:1px solid #ccc;border-radius:6px;font-size:0.9rem;
+  }
+  textarea{resize:vertical;min-height:44px;}
+  .required::after{content:" *";color:var(--rouge);}
+  .note{font-size:0.8rem;color:var(--gris);font-style:italic;}
+  .btn{background:var(--bleu);color:#fff;border:none;padding:10px 18px;border-radius:6px;cursor:pointer;font-size:0.9rem;margin-top:12px;margin-right:8px;}
+  .btn.secondary{background:#777;}
+  .btn.danger{background:var(--rouge);}
+  .btn.small{padding:5px 10px;font-size:0.78rem;margin:0;}
+  .btn:hover{opacity:0.9;}
+  table{width:100%;border-collapse:collapse;font-size:0.85rem;margin-top:10px;}
+  th,td{border:1px solid #ddd;padding:6px 8px;text-align:left;vertical-align:middle;}
+  th{background:var(--bleu-clair);}
+  .zone-block{border:1px solid #ddd;border-radius:8px;padding:14px;margin:14px 0;background:#fafcff;}
+  .zone-block h3{margin-top:0;color:var(--bleu);display:flex;justify-content:space-between;align-items:center;}
+  .crit-row{display:grid;grid-template-columns:2.2fr 1fr 1fr 0.6fr;gap:8px;align-items:center;padding:5px 8px;border-bottom:1px solid #eee;font-size:0.86rem;border-radius:6px;transition:background 0.15s;}
+  .crit-row:last-child{border-bottom:none;}
+  .crit-row select{padding:5px;}
+  .crit-texte{font-weight:500;}
+  .crit-indicateur{font-size:0.76rem;color:var(--gris);font-style:italic;margin-top:2px;}
+  .crit-row.crit-ok{background:var(--vert-clair);}
+  .crit-row.crit-ko{background:var(--rouge-clair);}
+  .crit-row.crit-na{background:#eaeaea;}
+  .score-box{background:var(--bleu-clair);border-radius:8px;padding:14px;margin-top:10px;text-align:center;}
+  .score-box .pct{font-size:2rem;font-weight:bold;}
+  .score-box.ok .pct{color:var(--vert);}
+  .score-box.warn .pct{color:var(--orange);}
+  .score-box.ko .pct{color:var(--rouge);}
+  .badge{display:inline-block;padding:2px 9px;border-radius:12px;font-size:0.75rem;font-weight:bold;}
+  .badge.ok{background:var(--vert-clair);color:var(--vert);}
+  .badge.ko{background:var(--rouge-clair);color:var(--rouge);}
+  .badge.warn{background:var(--orange-clair);color:var(--orange);}
+  .filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;}
+  .filters select,.filters input{width:auto;min-width:150px;}
+  footer{text-align:center;font-size:0.75rem;color:var(--gris);padding:20px;}
+  .add-zone-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px;}
+  .add-zone-row select,.add-zone-row input{width:auto;flex:1;min-width:180px;}
+  .sig-pad-wrap{background:#fff;}
+  .sig-pad{width:100%;height:120px;border:1px dashed #999;border-radius:6px;background:#fefefe;touch-action:none;cursor:crosshair;display:block;}
+  .sig-pad-wrap .btn{margin-top:6px;}
+  @media print{ nav, .no-print{display:none !important;} }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🧽 Contrôle Qualité Propreté — Grille générale d'audit</h1>
+  <div class="sub">Outil de contrôle et de traçabilité des prestations de nettoyage (locaux tertiaires, sanitaires, circulations, etc.)</div>
+</header>
+
+<nav id="mainNav">
+  <button data-tab="audit" class="active">📝 Nouveau contrôle</button>
+  <button data-tab="suivi">📋 Historique & Export</button>
+</nav>
+
+<main>
+
+<!-- AUDIT -->
+<section class="card tab" id="audit">
+  <h2>Informations générales</h2>
+  <div class="grid4">
+    <div><label class="required">Établissement / site</label><input required type="text" id="fEtab"></div>
+    <div><label class="required">Date du contrôle</label><input required type="date" id="fDate"></div>
+    <div><label>Heure</label><input type="time" id="fHeure"></div>
+    <div><label>Entreprise de nettoyage</label><input type="text" id="fEntreprise"></div>
+    <div><label>Agent(s) / équipe contrôlé(e)</label><input type="text" id="fAgent"></div>
+    <div><label class="required">Nom de l'auditeur / contrôleur</label><input required type="text" id="fAuditeur"></div>
+    <div><label>Type de contrôle</label>
+      <select id="fType">
+        <option>Contrôle quotidien</option>
+        <option>Contrôle hebdomadaire</option>
+        <option>Audit mensuel</option>
+        <option>Audit trimestriel</option>
+        <option>Contrôle suite réclamation</option>
+      </select>
+    </div>
+    <div><label>Seuil d'acceptabilité (%)</label><input type="number" id="fSeuil" value="80" min="0" max="100"></div>
+  </div>
+
+  <h2 style="margin-top:24px;">Grille de contrôle par zone</h2>
+  <p class="note">Ajoute les zones à contrôler. Pour chaque critère, coche <strong>Conforme</strong> ou <strong>Non conforme</strong> ; laisse vide si le critère ne s'applique pas à ce local.</p>
+
+  <div class="add-zone-row no-print">
+    <select id="zoneTemplate">
+      <option value="bureaux">Bureaux / salles de classe</option>
+      <option value="sanitaires">Sanitaires / vestiaires</option>
+      <option value="circulations">Circulations, halls, escaliers</option>
+      <option value="sols">Sols (grille dédiée)</option>
+      <option value="mobilier">Mobilier et surfaces</option>
+      <option value="vitres">Vitrages et surfaces vitrées</option>
+      <option value="points_contact">Points de contact (bionettoyage)</option>
+      <option value="dechets">Déchets, consommables, matériel</option>
+      <option value="cuisine">Cuisine / office / cafétéria</option>
+      <option value="vide">Zone personnalisée (vide)</option>
+    </select>
+    <input type="text" id="zoneNomPerso" placeholder="Nom du local (ex: Bureau 204)">
+    <button type="button" class="btn small" id="btnAddZone">➕ Ajouter la zone</button>
+  </div>
+
+  <p class="note" id="zoneHint">La zone est ajoutée automatiquement dès que tu choisis un type ci-dessus. Utilise le bouton pour ajouter une autre zone du même type (ex. un 2e bureau).</p>
+
+  <div id="zonesContainer"></div>
+
+  <div class="score-box" id="scoreBox">
+    <div>Score global de conformité</div>
+    <div class="pct" id="scorePct">--</div>
+    <div class="note" id="scoreDetail"></div>
+  </div>
+
+  <h2 style="margin-top:24px;">Synthèse et suivi</h2>
+  <div class="grid">
+    <div><label>Non-conformités majeures constatées</label><textarea id="fNcMajeures"></textarea></div>
+    <div><label>Plan d'actions correctives</label><textarea id="fActions"></textarea></div>
+  </div>
+  <div class="grid3">
+    <div>
+      <label>Signature auditeur</label>
+      <div class="sig-pad-wrap">
+        <canvas class="sig-pad" id="sigAuditeurPad" width="300" height="120"></canvas>
+        <button type="button" class="btn secondary small no-print" onclick="clearSig('sigAuditeurPad')">🗑️ Effacer</button>
+      </div>
+    </div>
+    <div>
+      <label>Signature agent / responsable site</label>
+      <div class="sig-pad-wrap">
+        <canvas class="sig-pad" id="sigAgentPad" width="300" height="120"></canvas>
+        <button type="button" class="btn secondary small no-print" onclick="clearSig('sigAgentPad')">🗑️ Effacer</button>
+      </div>
+    </div>
+    <div>
+      <label>Signature client (si applicable)</label>
+      <div class="sig-pad-wrap">
+        <canvas class="sig-pad" id="sigClientPad" width="300" height="120"></canvas>
+        <button type="button" class="btn secondary small no-print" onclick="clearSig('sigClientPad')">🗑️ Effacer</button>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn" id="btnSaveAudit">💾 Enregistrer ce contrôle</button>
+  <button class="btn secondary" id="btnResetAudit">🔄 Nouveau contrôle vierge</button>
+</section>
+
+<!-- SUIVI -->
+<section class="card tab" id="suivi" style="display:none;">
+  <div id="suiviLock" style="max-width:380px;margin:20px auto;text-align:center;">
+    <h2>🔒 Accès protégé</h2>
+    <p class="note">L'historique des contrôles est réservé à l'encadrement. Merci de saisir le code d'accès.</p>
+    <input type="password" id="suiviCodeInput" placeholder="Code d'accès" style="text-align:center;margin-bottom:10px;">
+    <br>
+    <button type="button" class="btn" id="btnUnlockSuivi">🔓 Déverrouiller</button>
+    <p class="note" id="suiviLockError" style="color:#b00020;display:none;margin-top:10px;">Code incorrect.</p>
+  </div>
+
+  <div id="suiviContent" style="display:none;">
+    <h2>📋 Historique des contrôles enregistrés</h2>
+    <div class="filters no-print">
+      <input type="text" id="filterEtab" placeholder="Filtrer par établissement">
+      <input type="text" id="filterAuditeur" placeholder="Filtrer par auditeur">
+      <select id="filterResultat">
+        <option value="">Tous les résultats</option>
+        <option value="ok">Conforme (≥ seuil)</option>
+        <option value="ko">Non conforme (&lt; seuil)</option>
+      </select>
+    </div>
+    <div id="statsBar" class="note"></div>
+    <div style="overflow-x:auto;">
+      <table id="tableSuivi">
+        <thead><tr><th>Date</th><th>Établissement</th><th>Auditeur</th><th>Type</th><th>Score</th><th>Résultat</th><th>NC majeures</th><th class="no-print">Actions</th></tr></thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+    <div class="no-print">
+      <button class="btn" id="btnExportCsv">⬇️ Exporter en CSV</button>
+      <button class="btn secondary" id="btnPrint">🖨️ Imprimer / Export PDF</button>
+      <button class="btn danger" id="btnClearAll">🗑️ Réinitialiser tout l'historique</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>Outil pédagogique et professionnel de contrôle qualité propreté — grille générique adaptable à tout type de site. Données enregistrées en ligne et partagées entre tous les utilisateurs de l'application.</footer>
+
+<script>
+const API_URL = "/api/proprete-data";
+const CURRENT_KEY = "cq_proprete_courant";
+const ACCESS_CODE = "PROPRETE2026";
+let suiviUnlocked = false;
+
+const ZONE_TEMPLATES = {
+  bureaux: {
+    label: "Bureaux / salles de classe",
+    criteres: [
+      { texte: "Sols : absence de salissures adhérentes et empoussièrement", indicateur: "Conforme : aucun résidu, tache ou poussière visible. Non conforme : salissures ou poussière visibles à l'œil nu." },
+      { texte: "Sous mobilier : absence de salissures et poussière", indicateur: "Conforme : aucun dépôt sous les meubles. Non conforme : poussière, fils ou débris présents." },
+      { texte: "Angles et plinthes : absence de salissures", indicateur: "Conforme : angles et plinthes nets. Non conforme : traces, toiles d'araignées ou dépôts visibles." },
+      { texte: "Bureaux et mobilier : absence de traces et poussière", indicateur: "Conforme : surfaces sans trace ni poussière au toucher. Non conforme : dépôt visible ou trace au doigt." },
+      { texte: "Corbeilles vidées et propres", indicateur: "Conforme : corbeille vide, sac changé, bac propre. Non conforme : déchets restants ou bac sale." },
+      { texte: "Interrupteurs et poignées désinfectés", indicateur: "Conforme : surfaces désinfectées, sans trace. Non conforme : traces de doigts ou désinfection non visible." },
+      { texte: "Absence d'odeur désagréable", indicateur: "Conforme : aucune odeur perceptible en entrant. Non conforme : odeur de renfermé, déchets ou désinfectant excessif." }
+    ]
+  },
+  sanitaires: {
+    label: "Sanitaires / vestiaires",
+    criteres: [
+      { texte: "Cuvettes / urinoirs : absence de traces et dépôts", indicateur: "Conforme : aucune trace de calcaire, tartre ou dépôt. Non conforme : traces visibles ou odeur persistante." },
+      { texte: "Lavabos et robinetterie : absence de traces calcaires", indicateur: "Conforme : robinetterie brillante, sans calcaire. Non conforme : dépôts blanchâtres visibles." },
+      { texte: "Miroirs : absence de traces", indicateur: "Conforme : miroir net, sans trace de doigts ni buée résiduelle. Non conforme : traces visibles." },
+      { texte: "Sol : absence de salissures et présence de séchage correct", indicateur: "Conforme : sol propre et sec, sans flaque. Non conforme : sol mouillé, glissant ou taché." },
+      { texte: "Distributeurs (savon, papier) approvisionnés", indicateur: "Conforme : tous les distributeurs remplis. Non conforme : au moins un distributeur vide." },
+      { texte: "Poubelles vidées et sacs changés", indicateur: "Conforme : poubelle vide, sac neuf en place. Non conforme : déchets restants ou sac absent." },
+      { texte: "Absence d'odeur désagréable", indicateur: "Conforme : aucune odeur perceptible. Non conforme : odeur d'urine, d'humidité ou de renfermé." },
+      { texte: "Points de contact désinfectés (poignées, chasses d'eau)", indicateur: "Conforme : poignées et chasses désinfectées, sans trace. Non conforme : traces visibles ou désinfection non réalisée." }
+    ]
+  },
+  circulations: {
+    label: "Circulations, halls, escaliers",
+    criteres: [
+      { texte: "Sols : absence de salissures adhérentes et traces", indicateur: "Conforme : sol propre, sans trace de pas ni salissure. Non conforme : traces ou résidus visibles." },
+      { texte: "Mains courantes : absence de traces et poussière", indicateur: "Conforme : main courante propre au toucher. Non conforme : poussière ou traces de mains." },
+      { texte: "Tapis d'accueil : absence d'empoussièrement", indicateur: "Conforme : tapis propre, sans poussière ni tache. Non conforme : empoussièrement visible." },
+      { texte: "Portes et vitrages d'entrée propres", indicateur: "Conforme : vitrages et portes sans trace de doigts. Non conforme : traces ou salissures visibles." },
+      { texte: "Absence d'encombrement ou d'obstacle", indicateur: "Conforme : circulation dégagée. Non conforme : objets ou matériel entravant le passage." }
+    ]
+  },
+  sols: {
+    label: "Sols (grille dédiée)",
+    criteres: [
+      { texte: "Absence de salissures adhérentes", indicateur: "Conforme : aucune salissure collée au sol. Non conforme : résidus adhérents visibles." },
+      { texte: "Absence d'empoussièrement", indicateur: "Conforme : sol sans dépôt de poussière. Non conforme : poussière visible au toucher ou à l'œil." },
+      { texte: "Absence de taches", indicateur: "Conforme : aucune tache visible. Non conforme : taches persistantes." },
+      { texte: "Angles et détourage propres", indicateur: "Conforme : angles et bordures nets. Non conforme : résidus dans les coins." },
+      { texte: "Plinthes / goulottes propres", indicateur: "Conforme : plinthes sans dépôt ni trace. Non conforme : poussière ou salissure visible." },
+      { texte: "Aspect brillant / mat conforme au protocole", indicateur: "Conforme : rendu (brillant ou mat) conforme au protocole du site. Non conforme : aspect terne ou irrégulier non prévu." }
+    ]
+  },
+  mobilier: {
+    label: "Mobilier et surfaces",
+    criteres: [
+      { texte: "Absence de salissures non adhérentes", indicateur: "Conforme : aucune salissure superficielle (poussière, miettes). Non conforme : résidus visibles." },
+      { texte: "Absence de salissures adhérentes", indicateur: "Conforme : aucune tache collée à la surface. Non conforme : résidus difficiles à enlever, visibles." },
+      { texte: "Absence de traces", indicateur: "Conforme : surface sans trace de doigts ni auréole. Non conforme : traces visibles." },
+      { texte: "Absence de dégradations visibles", indicateur: "Conforme : mobilier en bon état apparent. Non conforme : rayures, chocs ou dégradations anormales signalées." },
+      { texte: "Absence de zones non traitées", indicateur: "Conforme : surface nettoyée uniformément. Non conforme : zones oubliées identifiables." }
+    ]
+  },
+  vitres: {
+    label: "Vitrages et surfaces vitrées",
+    criteres: [
+      { texte: "Absence de traces et coulures", indicateur: "Conforme : vitrage net, sans trace ni coulure. Non conforme : traces ou coulures visibles." },
+      { texte: "Absence de poussière sur les encadrements", indicateur: "Conforme : encadrements sans dépôt de poussière. Non conforme : poussière visible." },
+      { texte: "Transparence correcte", indicateur: "Conforme : vue à travers la vitre nette. Non conforme : voile, buée ou dépôt réduisant la transparence." },
+      { texte: "Absence de traces de doigts sur les zones basses", indicateur: "Conforme : zones basses sans trace de main. Non conforme : traces de doigts visibles." }
+    ]
+  },
+  points_contact: {
+    label: "Points de contact (bionettoyage)",
+    criteres: [
+      { texte: "Poignées de portes désinfectées", indicateur: "Conforme : poignées désinfectées, sans résidu. Non conforme : désinfection non visible ou trace présente." },
+      { texte: "Interrupteurs désinfectés", indicateur: "Conforme : interrupteurs désinfectés, sans trace. Non conforme : traces de doigts ou poussière." },
+      { texte: "Rampes et mains courantes désinfectées", indicateur: "Conforme : rampes désinfectées, propres au toucher. Non conforme : traces ou désinfection non réalisée." },
+      { texte: "Téléphones / claviers désinfectés si applicable", indicateur: "Conforme : équipements désinfectés selon le protocole. Non conforme : traces visibles ou étape non réalisée." },
+      { texte: "Respect du protocole de bionettoyage (progression, temps de contact)", indicateur: "Conforme : progression du plus propre au plus sale et temps de contact du produit respectés. Non conforme : écart constaté." }
+    ]
+  },
+  dechets: {
+    label: "Déchets, consommables, matériel",
+    criteres: [
+      { texte: "Poubelles vidées selon fréquence prévue", indicateur: "Conforme : vidage réalisé selon la fréquence définie. Non conforme : dépassement constaté." },
+      { texte: "Tri sélectif respecté", indicateur: "Conforme : déchets répartis dans les bonnes poubelles. Non conforme : mélange constaté." },
+      { texte: "Consommables réapprovisionnés (savon, papier, gel)", indicateur: "Conforme : tous les consommables disponibles. Non conforme : rupture de stock constatée." },
+      { texte: "Matériel de nettoyage rangé et en bon état", indicateur: "Conforme : matériel rangé, propre et fonctionnel. Non conforme : matériel sale, endommagé ou mal rangé." },
+      { texte: "Chariot de ménage propre et organisé", indicateur: "Conforme : chariot propre, produits et équipements rangés. Non conforme : désordre ou salissures visibles." }
+    ]
+  },
+  cuisine: {
+    label: "Cuisine / office / cafétéria",
+    criteres: [
+      { texte: "Plans de travail désinfectés", indicateur: "Conforme : plans de travail désinfectés, sans résidu. Non conforme : traces ou résidus alimentaires visibles." },
+      { texte: "Éviers et robinetterie propres", indicateur: "Conforme : évier et robinetterie sans trace ni dépôt. Non conforme : salissures ou calcaire visibles." },
+      { texte: "Sol propre et non glissant", indicateur: "Conforme : sol propre, sec et non glissant. Non conforme : sol gras, mouillé ou taché." },
+      { texte: "Réfrigérateur / équipements sans traces", indicateur: "Conforme : équipements propres, sans trace ni odeur. Non conforme : salissures ou odeur constatées." },
+      { texte: "Poubelles vidées et zone sans odeur", indicateur: "Conforme : poubelles vides et zone sans odeur. Non conforme : déchets restants ou odeur perceptible." }
+    ]
+  },
+  vide: { label: "Zone personnalisée", criteres: [] }
+};
+
+let zoneCounter = 0;
+
+function loadCurrent(){
+  try{ return JSON.parse(localStorage.getItem(CURRENT_KEY)) || null; }catch(e){ return null; }
+}
+function saveCurrent(state){ localStorage.setItem(CURRENT_KEY, JSON.stringify(state)); }
+
+async function loadHistorique(){
+  try{
+    const res = await fetch(API_URL);
+    if(!res.ok) throw new Error("Erreur serveur");
+    return await res.json();
+  }catch(e){
+    console.error(e);
+    return null; // null = erreur réseau, distinct d'une liste vide
+  }
+}
+async function ajouterEntree(entry){
+  const res = await fetch(API_URL, {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify(entry)
+  });
+  if(!res.ok) throw new Error("Échec de l'enregistrement en ligne");
+  return await res.json();
+}
+async function supprimerEntree(id){
+  const res = await fetch(API_URL + "?id=" + encodeURIComponent(id), { method: "DELETE" });
+  if(!res.ok) throw new Error("Échec de la suppression");
+  return await res.json();
+}
+async function viderHistorique(){
+  const res = await fetch(API_URL + "?all=1", { method: "DELETE" });
+  if(!res.ok) throw new Error("Échec de la réinitialisation");
+  return await res.json();
+}
+
+document.querySelectorAll('#mainNav button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('#mainNav button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.tab').forEach(t=>t.style.display='none');
+    document.getElementById(btn.dataset.tab).style.display='block';
+    if(btn.dataset.tab === 'suivi'){
+      if(suiviUnlocked){
+        document.getElementById('suiviLock').style.display = 'none';
+        document.getElementById('suiviContent').style.display = 'block';
+        renderTable();
+      }else{
+        document.getElementById('suiviLock').style.display = 'block';
+        document.getElementById('suiviContent').style.display = 'none';
+        document.getElementById('suiviCodeInput').value = '';
+        document.getElementById('suiviLockError').style.display = 'none';
+      }
+    }
+  });
+});
+
+function tryUnlockSuivi(){
+  const val = document.getElementById('suiviCodeInput').value;
+  if(val === ACCESS_CODE){
+    suiviUnlocked = true;
+    document.getElementById('suiviLock').style.display = 'none';
+    document.getElementById('suiviContent').style.display = 'block';
+    renderTable();
+  }else{
+    document.getElementById('suiviLockError').style.display = 'block';
+  }
+}
+document.getElementById('btnUnlockSuivi').addEventListener('click', tryUnlockSuivi);
+document.getElementById('suiviCodeInput').addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter') tryUnlockSuivi();
+});
+
+function addZone(templateKey, customName){
+  zoneCounter++;
+  const id = "zone_" + zoneCounter;
+  const tpl = ZONE_TEMPLATES[templateKey];
+  const label = customName && customName.trim() ? customName.trim() : tpl.label;
+
+  const div = document.createElement('div');
+  div.className = "zone-block";
+  div.dataset.zoneId = id;
+  div.dataset.template = templateKey;
+
+  let critHtml = "";
+  tpl.criteres.forEach((c, i)=>{
+    critHtml += `
+      <div class="crit-row" data-crit="${i}">
+        <div>
+          <div class="crit-texte">${c.texte}</div>
+          ${c.indicateur ? `<div class="crit-indicateur">💡 ${c.indicateur}</div>` : ""}
+        </div>
+        <select class="crit-select">
+          <option value="">-- Choisir --</option>
+          <option value="conforme">✅ Conforme</option>
+          <option value="non-conforme">❌ Non conforme</option>
+          <option value="na">N/A</option>
+        </select>
+        <input type="text" class="crit-obs" placeholder="Observation (optionnel)">
+        <span></span>
+      </div>`;
+  });
+
+  div.innerHTML = `
+    <h3>${label} <button type="button" class="btn danger small no-print" onclick="removeZone('${id}')">✕ Supprimer</button></h3>
+    <div class="crit-list">${critHtml}</div>
+    <div class="add-crit-row no-print" style="margin-top:8px;display:flex;gap:8px;">
+      <input type="text" class="new-crit-text" placeholder="Ajouter un critère personnalisé...">
+      <button type="button" class="btn small" onclick="addCustomCriterion('${id}')">➕</button>
+    </div>
+  `;
+  document.getElementById('zonesContainer').appendChild(div);
+  updateScore();
+}
+
+function addCustomCriterion(zoneId){
+  const div = document.querySelector(`[data-zone-id="${zoneId}"]`);
+  const input = div.querySelector('.new-crit-text');
+  const text = input.value.trim();
+  if(!text) return;
+  const list = div.querySelector('.crit-list');
+  const row = document.createElement('div');
+  row.className = "crit-row";
+  row.innerHTML = `
+    <div>
+      <div class="crit-texte">${text}</div>
+    </div>
+    <select class="crit-select">
+      <option value="">-- Choisir --</option>
+      <option value="conforme">✅ Conforme</option>
+      <option value="non-conforme">❌ Non conforme</option>
+      <option value="na">N/A</option>
+    </select>
+    <input type="text" class="crit-obs" placeholder="Observation (optionnel)">
+    <span></span>
+  `;
+  list.appendChild(row);
+  input.value = "";
+  attachScoreListeners();
+  updateScore();
+}
+
+function removeZone(zoneId){
+  const div = document.querySelector(`[data-zone-id="${zoneId}"]`);
+  if(div) div.remove();
+  updateScore();
+}
+
+function addZoneFromSelector(){
+  const tplKey = document.getElementById('zoneTemplate').value;
+  const customName = document.getElementById('zoneNomPerso').value;
+  addZone(tplKey, customName);
+  document.getElementById('zoneNomPerso').value = "";
+  attachScoreListeners();
+}
+document.getElementById('zoneTemplate').addEventListener('change', addZoneFromSelector);
+document.getElementById('btnAddZone').addEventListener('click', addZoneFromSelector);
+
+function attachScoreListeners(){
+  document.querySelectorAll('.crit-select').forEach(sel=>{
+    sel.removeEventListener('change', updateScore);
+    sel.removeEventListener('change', applyCritColorEvt);
+    sel.addEventListener('change', updateScore);
+    sel.addEventListener('change', applyCritColorEvt);
+    applyCritColor(sel);
+  });
+}
+
+function applyCritColorEvt(e){ applyCritColor(e.target); }
+
+function applyCritColor(select){
+  const row = select.closest('.crit-row');
+  if(!row) return;
+  row.classList.remove('crit-ok', 'crit-ko', 'crit-na');
+  if(select.value === 'conforme') row.classList.add('crit-ok');
+  else if(select.value === 'non-conforme') row.classList.add('crit-ko');
+  else if(select.value === 'na') row.classList.add('crit-na');
+}
+
+function updateScore(){
+  attachScoreListeners();
+  const selects = document.querySelectorAll('.crit-select');
+  let total = 0, conformes = 0;
+  selects.forEach(s=>{
+    if(s.value === 'conforme'){ total++; conformes++; }
+    else if(s.value === 'non-conforme'){ total++; }
+  });
+  const box = document.getElementById('scoreBox');
+  const pctEl = document.getElementById('scorePct');
+  const detailEl = document.getElementById('scoreDetail');
+  const seuil = parseFloat(document.getElementById('fSeuil').value) || 80;
+
+  if(total === 0){
+    pctEl.textContent = "--";
+    detailEl.textContent = "Renseigne au moins un critère pour calculer le score.";
+    box.className = "score-box";
+    return;
+  }
+  const pct = Math.round((conformes/total)*1000)/10;
+  pctEl.textContent = pct + " %";
+  detailEl.textContent = `${conformes} critère(s) conforme(s) sur ${total} évalué(s) — seuil d'acceptabilité : ${seuil}%`;
+  box.className = "score-box " + (pct >= seuil ? "ok" : (pct >= seuil - 15 ? "warn" : "ko"));
+}
+document.getElementById('fSeuil').addEventListener('input', updateScore);
+
+function collectZonesData(){
+  const zones = [];
+  document.querySelectorAll('.zone-block').forEach(div=>{
+    const label = div.querySelector('h3').childNodes[0].textContent.trim();
+    const criteres = [];
+    div.querySelectorAll('.crit-row').forEach(row=>{
+      criteres.push({
+        texte: row.querySelector('.crit-texte').textContent,
+        resultat: row.querySelector('.crit-select').value,
+        observation: row.querySelector('.crit-obs').value
+      });
+    });
+    zones.push({ label, criteres });
+  });
+  return zones;
+}
+
+document.getElementById('btnSaveAudit').addEventListener('click', async ()=>{
+  const etab = document.getElementById('fEtab').value;
+  const date = document.getElementById('fDate').value;
+  const auditeur = document.getElementById('fAuditeur').value;
+  if(!etab || !date || !auditeur){
+    alert("Merci de renseigner au minimum l'établissement, la date et l'auditeur.");
+    return;
+  }
+  const zones = collectZonesData();
+  let total=0, conformes=0;
+  zones.forEach(z=>z.criteres.forEach(c=>{ if(c.resultat==='conforme'){total++;conformes++;} else if(c.resultat==='non-conforme'){total++;} }));
+  const pct = total>0 ? Math.round((conformes/total)*1000)/10 : null;
+  const seuil = parseFloat(document.getElementById('fSeuil').value) || 80;
+
+  const entry = {
+    etablissement: etab,
+    date: date,
+    heure: document.getElementById('fHeure').value,
+    entreprise: document.getElementById('fEntreprise').value,
+    agent: document.getElementById('fAgent').value,
+    auditeur: auditeur,
+    type: document.getElementById('fType').value,
+    seuil: seuil,
+    zones: zones,
+    score: pct,
+    resultat: pct !== null ? (pct >= seuil ? 'ok' : 'ko') : null,
+    ncMajeures: document.getElementById('fNcMajeures').value,
+    actions: document.getElementById('fActions').value,
+    sigAuditeur: getSigData('sigAuditeurPad'),
+    sigAgent: getSigData('sigAgentPad'),
+    sigClient: getSigData('sigClientPad'),
+    timestamp: new Date().toISOString()
+  };
+
+  const btn = document.getElementById('btnSaveAudit');
+  btn.disabled = true; btn.textContent = "💾 Enregistrement...";
+  try{
+    await ajouterEntree(entry);
+    alert("✅ Contrôle enregistré en ligne pour " + entry.etablissement + " (" + (pct!==null?pct+"%":"score non calculé") + ").");
+  }catch(e){
+    alert("❌ Erreur : le contrôle n'a pas pu être enregistré en ligne. Vérifie ta connexion et réessaie.");
+  }finally{
+    btn.disabled = false; btn.textContent = "💾 Enregistrer ce contrôle";
+  }
+});
+
+document.getElementById('btnResetAudit').addEventListener('click', ()=>{
+  if(confirm("Vider le formulaire actuel pour démarrer un nouveau contrôle ?")){
+    document.querySelectorAll('#audit input[type=text], #audit input[type=date], #audit input[type=time], #audit textarea').forEach(el=>el.value="");
+    document.getElementById('fSeuil').value = 80;
+    document.getElementById('zonesContainer').innerHTML = "";
+    ['sigAuditeurPad','sigAgentPad','sigClientPad'].forEach(clearSig);
+    updateScore();
+  }
+});
+
+async function renderTable(){
+  const tbody = document.getElementById('tableBody');
+  const statsBar = document.getElementById('statsBar');
+  statsBar.textContent = "Chargement des données en ligne...";
+  const hist = await loadHistorique();
+
+  if(hist === null){
+    tbody.innerHTML = "";
+    statsBar.textContent = "⚠️ Impossible de charger l'historique (connexion au serveur impossible).";
+    return;
+  }
+
+  const fEtab = document.getElementById('filterEtab').value.toLowerCase();
+  const fAud = document.getElementById('filterAuditeur').value.toLowerCase();
+  const fRes = document.getElementById('filterResultat').value;
+
+  const filtered = hist.filter(h=>{
+    if(fEtab && !(h.etablissement||"").toLowerCase().includes(fEtab)) return false;
+    if(fAud && !(h.auditeur||"").toLowerCase().includes(fAud)) return false;
+    if(fRes && h.resultat !== fRes) return false;
+    return true;
+  });
+
+  tbody.innerHTML = "";
+  filtered.slice().reverse().forEach(h=>{
+    const badgeClass = h.resultat === 'ok' ? 'ok' : (h.resultat === 'ko' ? 'ko' : 'warn');
+    const badgeText = h.resultat === 'ok' ? 'Conforme' : (h.resultat === 'ko' ? 'Non conforme' : 'Non calculé');
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${h.date||''} ${h.heure||''}</td>
+      <td>${h.etablissement||''}</td>
+      <td>${h.auditeur||''}</td>
+      <td>${h.type||''}</td>
+      <td>${h.score!==null && h.score!==undefined ? h.score+'%' : '-'}</td>
+      <td><span class="badge ${badgeClass}">${badgeText}</span></td>
+      <td style="max-width:220px;font-size:0.78rem;">${h.ncMajeures||''}</td>
+      <td class="no-print"><button class="btn danger small" onclick="deleteEntry('${h.id}')">✕</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+  statsBar.textContent = `Total : ${filtered.length} contrôle(s) enregistré(s)`;
+}
+
+async function deleteEntry(id){
+  if(confirm("Supprimer ce contrôle de l'historique ?")){
+    try{
+      await supprimerEntree(id);
+      renderTable();
+    }catch(e){
+      alert("❌ La suppression a échoué. Réessaie.");
+    }
+  }
+}
+
+['filterEtab','filterAuditeur','filterResultat'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', renderTable);
+  document.getElementById(id).addEventListener('change', renderTable);
+});
+
+document.getElementById('btnExportCsv').addEventListener('click', async ()=>{
+  const hist = await loadHistorique();
+  if(hist === null){ alert("Impossible de récupérer les données en ligne."); return; }
+  if(hist.length===0){ alert("Aucune donnée à exporter."); return; }
+  let csv = "date;heure;etablissement;entreprise;agent;auditeur;type;score;resultat;nc_majeures;actions\n";
+  hist.forEach(h=>{
+    csv += `"${h.date||''}";"${h.heure||''}";"${h.etablissement||''}";"${h.entreprise||''}";"${h.agent||''}";"${h.auditeur||''}";"${h.type||''}";"${h.score||''}";"${h.resultat||''}";"${(h.ncMajeures||'').replace(/"/g,"'")}";"${(h.actions||'').replace(/"/g,"'")}"\n`;
+  });
+  const blob = new Blob(["\uFEFF"+csv], {type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = "controle_qualite_proprete_" + new Date().toISOString().slice(0,10) + ".csv";
+  a.click();
+});
+
+document.getElementById('btnPrint').addEventListener('click', ()=> window.print());
+document.getElementById('btnClearAll').addEventListener('click', async ()=>{
+  if(confirm("⚠️ Cette action supprimera définitivement tout l'historique des contrôles en ligne, pour tout le monde. Continuer ?")){
+    try{
+      await viderHistorique();
+      renderTable();
+    }catch(e){
+      alert("❌ La réinitialisation a échoué. Réessaie.");
+    }
+  }
+});
+
+// --- Pavés de signature tactile ---
+function initSignaturePad(canvas){
+  const ctx = canvas.getContext('2d');
+  const ratio = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * ratio;
+  canvas.height = rect.height * ratio;
+  ctx.scale(ratio, ratio);
+  ctx.lineWidth = 2.2;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.strokeStyle = '#0b5394';
+
+  let drawing = false, lastX = 0, lastY = 0;
+
+  function pos(e){
+    const r = canvas.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    return { x: clientX - r.left, y: clientY - r.top };
+  }
+  function start(e){
+    drawing = true;
+    const p = pos(e);
+    lastX = p.x; lastY = p.y;
+    canvas.dataset.signed = "1";
+    e.preventDefault();
+  }
+  function move(e){
+    if(!drawing) return;
+    const p = pos(e);
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+    lastX = p.x; lastY = p.y;
+    e.preventDefault();
+  }
+  function end(){ drawing = false; }
+
+  canvas.addEventListener('mousedown', start);
+  canvas.addEventListener('mousemove', move);
+  window.addEventListener('mouseup', end);
+  canvas.addEventListener('touchstart', start, { passive:false });
+  canvas.addEventListener('touchmove', move, { passive:false });
+  canvas.addEventListener('touchend', end);
+}
+
+function clearSig(id){
+  const canvas = document.getElementById(id);
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  canvas.dataset.signed = "";
+}
+
+function getSigData(id){
+  const canvas = document.getElementById(id);
+  if(!canvas || canvas.dataset.signed !== "1") return "";
+  return canvas.toDataURL('image/png');
+}
+
+document.querySelectorAll('.sig-pad').forEach(initSignaturePad);
+
+attachScoreListeners();
+updateScore();
+</script>
+</body>
+</html>
